@@ -61,7 +61,7 @@ public class DroneController : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		Debug.Log("Start");
+		Debug.Log("Drone Controller Start");
 		// initialize data array
 		data = new byte[width*height*3];
 
@@ -100,15 +100,29 @@ public class DroneController : MonoBehaviour {
 		moveStick ();
 
 		// Start or land the drone
-		if (state.Buttons.Start.Equals(ButtonState.Pressed) && !startButtonPressed) {
-			if (isLanded)
-				droneClient.Takeoff();
-			else
+		if ((Input.GetButtonDown("Submit") || state.Buttons.Start.Equals(ButtonState.Pressed)) && !startButtonPressed) {
+			if (isLanded) {
+                droneClient.FlatTrim();
+                droneClient.ResetEmergency();
+                droneClient.Takeoff();
+			}
+            else
 				droneClient.Land();
 			isLanded = !isLanded;
 			startButtonPressed = true;
-		}
-		if (!state.Buttons.Start.Equals(ButtonState.Pressed))
+
+            // Log the nav data state request.
+            UnityEngine.Debug.LogFormat("DroneCtrl Navigation StateRequest: {0}", droneClient.StateRequestString);
+            // Log the nav data states.
+            string flags = "DroneCtrl NavigationState matches: ";
+            foreach (string navState in System.Enum.GetNames(typeof(NavigationState))) {
+                bool hasFlag = droneClient.NavigationData.State.HasFlag((NavigationState) System.Enum.Parse(typeof(NavigationState), navState));
+                if (hasFlag)
+                    flags += navState + " | ";
+            }
+            Debug.Log(flags);
+        }
+		if (!Input.GetButtonDown("Submit") && !state.Buttons.Start.Equals(ButtonState.Pressed))
 			startButtonPressed = false;
 
 		// exit application
@@ -118,9 +132,13 @@ public class DroneController : MonoBehaviour {
 		// Move the drone
 		var pitch = -state.ThumbSticks.Left.Y;
 		var roll = state.ThumbSticks.Left.X;
-		var gaz = state.Triggers.Right - state.Triggers.Left;
+        pitch += -Input.GetAxis("VerticalPitch");
+        roll += Input.GetAxis("HorizontalRoll");
+        var gaz = state.Triggers.Right - state.Triggers.Left;
 		var yaw = state.ThumbSticks.Right.X;
-		droneClient.Progress(AR.Drone.Client.Command.FlightMode.Progressive, pitch: pitch, roll: roll, gaz: gaz, yaw: yaw); 
+        gaz += Input.GetAxis("VerticalGaz");
+        yaw += Input.GetAxis("HorizontalYaw");
+        droneClient.Progress(AR.Drone.Client.Command.FlightMode.Progressive, pitch: pitch, roll: roll, gaz: gaz, yaw: yaw); 
 
 		// Switch drone camera
 		if (CameraForSwitchCheck.rotation.x >= SwitchRotation) {
@@ -199,6 +217,11 @@ public class DroneController : MonoBehaviour {
 		b /= total;
 		cameraTexture.SetPixels32(colorArray);
 		cameraTexture.Apply();
+
+        // Turn on the light if there is no camera data (black screen).
+        if (r == 0 && g == 0 && b == 0)
+            r = g = b = 255;
+
 		foreach (Light light in AmbientLights)
 			light.color = new Color32 (System.Convert.ToByte(r), System.Convert.ToByte(g), System.Convert.ToByte(b), 1);
 	}
@@ -253,8 +276,16 @@ public class DroneController : MonoBehaviour {
 	private void moveStick(){
 		var newRotation = Stick.rotation;
 		newRotation.x = StickRotationModifier* state.ThumbSticks.Left.Y;
-		newRotation.z =	-StickRotationModifier * state.ThumbSticks.Left.X;
-		Stick.rotation = newRotation;
+        newRotation.z =	-StickRotationModifier * state.ThumbSticks.Left.X;
+        // Added for Yaw.
+        newRotation.y = state.Triggers.Right - state.Triggers.Left;
+
+        // Added Rotation for Unity input (added Y rotation).
+        newRotation.x += StickRotationModifier * Input.GetAxis("VerticalPitch");
+        newRotation.z += -StickRotationModifier * Input.GetAxis("HorizontalRoll");
+        newRotation.y += StickRotationModifier * Input.GetAxis("HorizontalYaw");
+
+        Stick.rotation = newRotation;
 	}
 
 	/// <summary>

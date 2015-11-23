@@ -1,0 +1,16 @@
+Used and tested configuration:
+
+For Oculus DK2 development:
+* Windows 8.1 x64.
+* Radeon HD 6770M (drivers Catalyst 14.4 WHQL UnifL v2.4, for switchable graphics with Intel): http://www.leshcatlabs.net/forums/viewtopic.php?f=6&t=524
+* Unity 5.1.2p3 (other ones had OVRPlugins that did not worked), which includes OVRPlugin v0.1.1.0 (for fast fluid VR experience, other Unity versions and patches may or may NOT work, see notes).
+* Oculus Runtime 0.6.0.1 beta for Windows x64.
+
+Not necesary for development but recomended for Unity 5.1.2p3:
+* Oculus Utilities for Unity, tested v0.1.0-beta and v0.1.3.0-beta: https://developer.oculus.com/downloads/game-engines/0.1.3.0-beta/Oculus_Utilities_for_Unity_5/
+
+
+Notes:
+* Unity 5.1.2p3 includes OVRPlugin v0.1.1.0 which is faster and smother.
+* Unity 5.1.2f1 (final) includes OVRPlugin v0.5.0.0 which is laggier.
+* When running the Oculu Utilities for Unity, the Unity Console should print "Unity v5.1.2p3, Oculus Utilities v0.1.0, OVRPlugin v0.1.1.0.".

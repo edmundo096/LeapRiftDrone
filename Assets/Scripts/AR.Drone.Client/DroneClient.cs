@@ -206,6 +206,11 @@ namespace AR.Drone.Client
             get { return _navigationData; }
         }
 
+        // For Unity logging, to see the State request sent in the DroneClient object.
+        public string StateRequestString {
+            get { return System.Enum.GetName(typeof(StateRequest), _stateRequest); }
+        }
+
         #endregion
 
         #region Api
