@@ -1,8 +1,25 @@
-RiftDrone
+LeapRiftDrone
+============
+
+This is a fork from the https://github.com/scopus777/RiftDrone project with the following differences:
+* Added support for Leap Motion device.
+* Added the necesary dependency libraries and code changed for opening in Unity 5, which also means..
+	* Added support for Unity 5's integrated Oculus VR support.
+
+The following list is a draft of the current added functionalities/features:
+* Leap Motion support (to do).
+* Unity 5 VR integrated support.
+* Keyboard and generic Controllers (Joysticks input based on Moga Pro Power HID layout) input support for AR.Parrot 2 drone controlling.
+* Unity 5 x64 Editor support with the FFmpeg x64 library addition, for video streaming from the AR.Parrot 2 drone on the x64 version.
+
+### Still to do:
+* Import and use the Leap Motion Unity 5 libraries.
+
+Following is the original project decription (which needs to be updated):
 ============
 
 This unity project combines the Oculus Rift with the AR.Drone 2.0. A small cockpit with a big screen at the front was created. The screen displays the view of the drone. The user can use the oculus rift to orientate himself in the cockpit. If he looks down, there is a smaller screen where he can see the view of the bottom drone camera. The drone is controlled with a xbox 360 controller.
-Because of legal issues this project does not contain the functionalties for the oculus rift. But it can be simple integrated manually. Read the chapter Installation f¸r further instructions.
+Because of legal issues this project does not contain the functionalties for the oculus rift. But it can be simple integrated manually. Read the chapter Installation f√ºr further instructions.
 This project is made for Windows and only tested under Windows 7 64-Bit.
 
 For a small impression you can watch these videos: 
@@ -17,9 +34,9 @@ https://www.youtube.com/watch?v=b68LKfNzn9c
 
 ### Used libraries:
 * [Ruslan-B/AR.Drone C# Framework](https://github.com/Ruslan-B/AR.Drone)
-	- A C# Framework to control the AR.Drone. Originally this framework was made for .NET 4.0. I had to make same changes to make it possible to run the framework with .NET 3.5, because Unity only supports .NET up to the version 3.5. All needed files are contained in the script folder. More details about the changes can be found in the chapter ìChanges on the AR.Drone C# Frameworkî.
+	- A C# Framework to control the AR.Drone. Originally this framework was made for .NET 4.0. I had to make same changes to make it possible to run the framework with .NET 3.5, because Unity only supports .NET up to the version 3.5. All needed files are contained in the script folder. More details about the changes can be found in the chapter ‚ÄúChanges on the AR.Drone C# Framework‚Äù.
 * [Task Parallel Library for .NET 3.5](http://www.nuget.org/packages/TaskParallelLibrary/1.0.2856)
-	- The AR.Drone framework uses some threading class which are not available in .NET 3.5. Thatís why I had to add this library.
+	- The AR.Drone framework uses some threading class which are not available in .NET 3.5. That‚Äôs why I had to add this library.
 * [Ruslan-B/FFmpeg.AutoGen](https://github.com/Ruslan-B/FFmpeg.AutoGen)
 	- A C# Wrapper for FFmpeg. This is needed to decode the video packets of the AR.Drone. The DLLs of this problem causing a little bit of trouble. If you simple put them into the directory "Assets\Plugins\x86" they are not found in the game. So you need to put them into the unity editor directory if you want to test the game in the editor. After you building, you have to put the DLLs in the directory of the exe to work correctly. You can find the FFmpeg DLLs in "Assets\Plugins\x86\FFmpeg".
 * [Oculus Rift Plugin for Unity](http://paddytherabbit.com/unity3d-oculus-rift-plugin-setup)
@@ -32,10 +49,10 @@ https://www.youtube.com/watch?v=b68LKfNzn9c
 ### Installation:
 This project does not include every Library needed to execute the application. Therefore you have to follow the following instructions.
 
-1. Download the [Task Parallel Library for .NET 3.5](http://www.nuget.org/packages/TaskParallelLibrary/1.0.2856) and put ìSystem.Threading.dllî into the folder ìAssets\Plugins\x86î 
-2. Download [XInputDotNet](https://github.com/speps/XInputDotNet) for Unity and put ìXInputDotNetPure.dllî and ìXInputInterface.dllî into the folder ìAssets\Plugins\x86î
-3. Put the files situated in the directory ìAssets\Plugins\x86\FFmpegî into the directory of unity editor (e.g C:\Program Files (x86)\Unity\Editor). Otherwise unity is not able to find these secondary libraries. If you compile the application, then those files have also to be placed in the directory where the exe file of the application is situated.  
-4. (Optional) ñ Delete the Camera GameObject and follow [these](http://paddytherabbit.com/unity3d-oculus-rift-plugin-setup) instructions to integrate the oculus rift. Place the OVRCameraController gameobject at a suited position (where the head of the pilot would be most likely).
+1. Download the [Task Parallel Library for .NET 3.5](http://www.nuget.org/packages/TaskParallelLibrary/1.0.2856) and put ‚ÄúSystem.Threading.dll‚Äù into the folder ‚ÄúAssets\Plugins\x86‚Äù 
+2. Download [XInputDotNet](https://github.com/speps/XInputDotNet) for Unity and put ‚ÄúXInputDotNetPure.dll‚Äù and ‚ÄúXInputInterface.dll‚Äù into the folder ‚ÄúAssets\Plugins\x86‚Äù
+3. Put the files situated in the directory ‚ÄúAssets\Plugins\x86\FFmpeg‚Äù into the directory of unity editor (e.g C:\Program Files (x86)\Unity\Editor). Otherwise unity is not able to find these secondary libraries. If you compile the application, then those files have also to be placed in the directory where the exe file of the application is situated.  
+4. (Optional) ‚Äì Delete the Camera GameObject and follow [these](http://paddytherabbit.com/unity3d-oculus-rift-plugin-setup) instructions to integrate the oculus rift. Place the OVRCameraController gameobject at a suited position (where the head of the pilot would be most likely).
 
 ### Changes on the AR.Drone C#-Framework
 * StopWatch.Restart() replaced by StopWatch.Reset() and StopWatch.Start() in:
