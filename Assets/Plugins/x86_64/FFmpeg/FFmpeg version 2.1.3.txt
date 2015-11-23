@@ -1,0 +1,1 @@
+Added as version 2.1.3  https://github.com/Ruslan-B/FFmpeg.AutoGen/commit/72d0335e2ee3c83a23227c6aa28417164bc21925
