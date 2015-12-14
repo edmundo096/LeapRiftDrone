@@ -7,15 +7,15 @@ This is a fork from the https://github.com/scopus777/RiftDrone project with the 
 	* Added support for Unity 5's integrated Oculus VR support.
 
 The following list is a draft of the current added functionalities/features:
-* Leap Motion support (to do).
+* Leap Motion support.
 * Unity 5 VR integrated support.
 * Keyboard and generic Controllers (Joysticks input based on Moga Pro Power HID layout) input support for AR.Parrot 2 drone controlling.
 * Unity 5 x64 Editor support with the FFmpeg x64 library addition, for video streaming from the AR.Parrot 2 drone on the x64 version.
 
 ### Still to do:
-* Import and use the Leap Motion Unity 5 libraries.
+* Use the Leap Motion Unity 5 libraries.
 
-Following is the original project decription (which needs to be updated):
+### Following is the original project decription (which needs to be updated):
 ============
 
 This unity project combines the Oculus Rift with the AR.Drone 2.0. A small cockpit with a big screen at the front was created. The screen displays the view of the drone. The user can use the oculus rift to orientate himself in the cockpit. If he looks down, there is a smaller screen where he can see the view of the bottom drone camera. The drone is controlled with a xbox 360 controller.
