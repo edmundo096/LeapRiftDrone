@@ -103,7 +103,7 @@ public class DroneController : MonoBehaviour {
 		if ((Input.GetButtonDown("Submit") || state.Buttons.Start.Equals(ButtonState.Pressed)) && !startButtonPressed) {
 			if (isLanded) {
                 droneClient.FlatTrim();
-                droneClient.ResetEmergency();
+                //droneClient.ResetEmergency();
                 droneClient.Takeoff();
 			}
             else
