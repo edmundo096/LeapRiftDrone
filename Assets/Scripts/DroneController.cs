@@ -29,10 +29,11 @@ public class DroneController : MonoBehaviour {
 	// Wifi status
 	public TextMesh WifiText;
 	public TextMesh WifiChart;
-	public int maxChartBars = 20;
+    public int maxChartBars = 20;
 
-	// Gamepad variables
-	private bool playerIndexSet = false; 
+
+    // Gamepad variables
+    private bool playerIndexSet = false; 
 	private XInputDotNetPure.PlayerIndex playerIndex;
 	private GamePadState state;
 	private GamePadState prevState;
@@ -58,6 +59,7 @@ public class DroneController : MonoBehaviour {
 
 	// wlanclient for signal strength
 	private WlanClient client;
+    
 	
 	// Use this for initialization
 	void Start () {
@@ -99,8 +101,8 @@ public class DroneController : MonoBehaviour {
 
 		moveStick ();
 
-		// Start or land the drone
-		if ((Input.GetButtonDown("Submit") || state.Buttons.Start.Equals(ButtonState.Pressed)) && !startButtonPressed) {
+        // Start or land the drone
+        if ((Input.GetButtonDown("Submit") || state.Buttons.Start.Equals(ButtonState.Pressed)) && !startButtonPressed) {
 			if (isLanded) {
                 droneClient.FlatTrim();
                 //droneClient.ResetEmergency();
@@ -109,6 +111,8 @@ public class DroneController : MonoBehaviour {
             else
 				droneClient.Land();
 			isLanded = !isLanded;
+
+            // Set the button as pressed, so the landing/take off is not executed every frame.
 			startButtonPressed = true;
 
             // Log the nav data state request.
@@ -122,8 +126,11 @@ public class DroneController : MonoBehaviour {
             }
             Debug.Log(flags);
         }
+
+        // Reset the pressing status when the button is not pressed.
 		if (!Input.GetButtonDown("Submit") && !state.Buttons.Start.Equals(ButtonState.Pressed))
 			startButtonPressed = false;
+
 
 		// exit application
 		if (Input.GetKey("escape") || state.Buttons.Back.Equals (ButtonState.Pressed))
