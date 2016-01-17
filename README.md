@@ -1,6 +1,8 @@
 LeapRiftDrone
 ============
 
+**Our project page**: http://leapriftdrone.blogspot.mx/ You can find more info about the project there!
+
 This is a fork from the https://github.com/scopus777/RiftDrone project with the following differences:
 * Added support for Leap Motion device.
 * Added the necesary dependency libraries and code changed for opening in Unity 5, which also means..
@@ -12,9 +14,7 @@ The following list are the current added functionalities/features:
 * Unity 5 VR integrated support.
 * Keyboard and generic Controllers (Joysticks input based on Moga Pro Power HID layout) input support for AR.Parrot 2 drone controlling.
 * Unity 5 x64 Editor support with the FFmpeg x64 library addition, for video streaming from the AR.Parrot 2 drone on the x64 version.
-
-**Our project page**: http://leapriftdrone.blogspot.mx/
-You can find more info about the project there!
+* 
 
 ### Following is the original project decription (which is slightly outdated):
 ============
