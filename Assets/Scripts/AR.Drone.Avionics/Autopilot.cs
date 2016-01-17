@@ -233,7 +233,7 @@ namespace AR.Drone.Avionics
         /// </summary>
         /// <param name="aDroneClient">DroneClient object which Autopilot will be controlling</param>
         /// <remarks>Using this constructor will force DeafultObjective to be 'Hover'</remarks>
-        public Autopilot(DroneClient aDroneClient) : this(aDroneClient, new Hover(Expiration.Never))
+        public Autopilot(DroneClient aDroneClient) : this(aDroneClient, new AR.Drone.Avionics.Objectives.Hover(Expiration.Never))
         {
             /* Do Nothing */
         }

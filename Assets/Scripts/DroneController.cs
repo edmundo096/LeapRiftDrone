@@ -29,10 +29,18 @@ public class DroneController : MonoBehaviour {
 	// Wifi status
 	public TextMesh WifiText;
 	public TextMesh WifiChart;
-	public int maxChartBars = 20;
+    public int maxChartBars = 20;
 
-	// Gamepad variables
-	private bool playerIndexSet = false; 
+    // TODO may delete if not used
+    public Hover.Board.Items.HoverboardItem panelItem1;
+    public Hover.Board.Items.HoverboardItem panelItem2;
+    public GameObject TakeoffIndicator;
+    public Color TakeoffIndicatorColorFlying;
+    public Color TakeoffIndicatorColorLanded;
+
+
+    // Gamepad variables
+    private bool playerIndexSet = false; 
 	private XInputDotNetPure.PlayerIndex playerIndex;
 	private GamePadState state;
 	private GamePadState prevState;
@@ -58,6 +66,7 @@ public class DroneController : MonoBehaviour {
 
 	// wlanclient for signal strength
 	private WlanClient client;
+    
 	
 	// Use this for initialization
 	void Start () {
@@ -90,8 +99,58 @@ public class DroneController : MonoBehaviour {
 		client = new WlanClient();
 	}
 
-	// Update is called once per frame
-	void Update () {
+    // Start or land the drone
+    public void TakeOffOrLand() {
+        string currentLabel = "";
+
+        if (isLanded) {
+            droneClient.FlatTrim();
+            //droneClient.ResetEmergency();
+            droneClient.Takeoff();
+            currentLabel = "Land";
+            TakeoffIndicator.GetComponent<MeshRenderer>().material.color = TakeoffIndicatorColorFlying;
+        }
+        else {
+            droneClient.Land();
+            currentLabel = "Take Off";
+            TakeoffIndicator.GetComponent<MeshRenderer>().material.color = TakeoffIndicatorColorLanded;
+        }
+        isLanded = !isLanded;
+
+        // Set the button as pressed, so the landing/take off is not executed every frame.
+        startButtonPressed = true;
+
+        // Log the nav data state request.
+        UnityEngine.Debug.LogFormat("DroneCtrl Navigation StateRequest: {0}", droneClient.StateRequestString);
+        // Log the nav data states.
+        string flags = "DroneCtrl NavigationState matches: ";
+        foreach (string navState in System.Enum.GetNames(typeof(NavigationState))) {
+            bool hasFlag = droneClient.NavigationData.State.HasFlag((NavigationState)System.Enum.Parse(typeof(NavigationState), navState));
+            if (hasFlag)
+                flags += navState + " | ";
+        }
+        Debug.Log(flags);
+
+
+
+        // Update the TakeOff/Land panels.
+        //UnityEngine.UI.Text text1 = panelItem1.GetComponentInChildren<UnityEngine.UI.Text>() as UnityEngine.UI.Text;
+        //panelItem1.Label = currentLabel;
+        //text1.text = currentLabel;
+        //Debug.Log(panelItem1.Label);
+        //Debug.Log(text1.text);
+        //Debug.Log(text1);
+
+        //(panelItem1.GetComponentInChildren<Hover.Common.Display.UiLabel>() as Hover.Common.Display.UiLabel).Label = "ASG";
+        //Hover.Board.Display.Standard.UiItemSelectRenderer.
+
+        //UnityEngine.UI.Text text2 = panelItem2.GetComponentInChildren<UnityEngine.UI.Text>() as UnityEngine.UI.Text;
+        //if (text2 != null) text2.text = currentLabel;
+
+    }
+
+    // Update is called once per frame
+    void Update () {
 
 		convertCameraData ();
 
@@ -99,31 +158,15 @@ public class DroneController : MonoBehaviour {
 
 		moveStick ();
 
-		// Start or land the drone
-		if ((Input.GetButtonDown("Submit") || state.Buttons.Start.Equals(ButtonState.Pressed)) && !startButtonPressed) {
-			if (isLanded) {
-                droneClient.FlatTrim();
-                droneClient.ResetEmergency();
-                droneClient.Takeoff();
-			}
-            else
-				droneClient.Land();
-			isLanded = !isLanded;
-			startButtonPressed = true;
-
-            // Log the nav data state request.
-            UnityEngine.Debug.LogFormat("DroneCtrl Navigation StateRequest: {0}", droneClient.StateRequestString);
-            // Log the nav data states.
-            string flags = "DroneCtrl NavigationState matches: ";
-            foreach (string navState in System.Enum.GetNames(typeof(NavigationState))) {
-                bool hasFlag = droneClient.NavigationData.State.HasFlag((NavigationState) System.Enum.Parse(typeof(NavigationState), navState));
-                if (hasFlag)
-                    flags += navState + " | ";
-            }
-            Debug.Log(flags);
+        // Start or land the drone
+        if ((Input.GetButtonDown("Submit") || state.Buttons.Start.Equals(ButtonState.Pressed)) && !startButtonPressed) {
+            TakeOffOrLand();
         }
+
+        // Reset the pressing status when the button is not pressed.
 		if (!Input.GetButtonDown("Submit") && !state.Buttons.Start.Equals(ButtonState.Pressed))
 			startButtonPressed = false;
+
 
 		// exit application
 		if (Input.GetKey("escape") || state.Buttons.Back.Equals (ButtonState.Pressed))
